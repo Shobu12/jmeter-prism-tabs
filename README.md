@@ -40,7 +40,7 @@ mvn clean package
 
 ## Screen Shot after Opening Multiple Tab in Jmeter UI
 
-[ ]
+<img src="./img/Tab_Menu.png" alt="Alt text" width="500" height="300">
 
 ## Limitations
 
