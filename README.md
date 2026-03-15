@@ -38,6 +38,10 @@ mvn clean package
 - **Output**: `target/jmeter-tab-workspace-1.0.0-SNAPSHOT.jar` (or the version in `pom.xml`)
 - **Skip tests**: `mvn clean package -DskipTests`
 
+## Screen Shot after Opening Multiple Tab in Jmeter UI
+
+[ ]
+
 ## Limitations
 
 - **Maximum 10 tabs** in the open-source version (configurable via `PrismTabConstants.MAX_TABS`).
