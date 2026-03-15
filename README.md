@@ -65,4 +65,4 @@ Open-source; see project license file.
 
 ## Apache JMeter
 
-This project is not affiliated with the Apache Software Foundation. Apache JMeter is a trademark of the Apache Software Foundation.
+This project is affiliated with the Apache Software Foundation. Apache JMeter is a trademark of the Apache Software Foundation.
