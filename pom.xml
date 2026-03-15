@@ -6,7 +6,7 @@
 
   <groupId>com.prism.jmeter</groupId>
   <artifactId>jmeter-tab-workspace</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
   <name>JMeter Tab Workspace</name>
   <description>Browser-style multi-tab interface for Apache JMeter — open multiple test plans in separate tabs with full isolation.</description>
