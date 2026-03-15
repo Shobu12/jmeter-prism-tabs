@@ -1,0 +1,79 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Update version in pom.xml
+      run: |
+        mvn versions:set -DnewVersion=${{ github.event.inputs.version }} -DprocessAllModules
+
+    - name: Build and test
+      run: mvn clean install -DskipTests=false
+
+    - name: Commit version update
+      run: |
+        git add pom.xml
+        git add '**/pom.xml'
+        git commit -m "chore: bump version to ${{ github.event.inputs.version }}"
+
+    - name: Create Git tag
+      run: |
+        git tag -a v${{ github.event.inputs.version }} -m "Release version ${{ github.event.inputs.version }}"
+        git push origin main
+        git push origin v${{ github.event.inputs.version }}
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.event.inputs.version }}
+        release_name: Release ${{ github.event.inputs.version }}
+        body: |
+          ## Release ${{ github.event.inputs.version }}
+          
+          ### Changes
+          See commit history for detailed changes in this release.
+        draft: false
+        prerelease: false
+
+    - name: Upload build artifacts
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./target/jmeter-prism-tabs-${{ github.event.inputs.version }}.jar
+        asset_name: jmeter-prism-tabs-${{ github.event.inputs.version }}.jar
+        asset_content_type: application/java-archive
